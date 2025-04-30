@@ -20,7 +20,7 @@ utils.set_properties(document.getElementById("board"), {
     },
 });
 
-const ASSETS = "../assets";
+const ASSETS = "./assets";
 const IMAGES = {
     bb: "bb.svg",
     bw: "bw.svg",
