@@ -1,6 +1,7 @@
 import utils from "./utils.mjs";
 
-const [BW, BH] = [600, 600];
+const DW = Math.max(window.screen.width, window.innerWidth);
+const [BW, BH] = [DW - 100, DW - 100];
 const [TW, TH] = [Math.floor(BW / 8), Math.floor(BH / 8)];
 const render = document.getElementById("render");
 utils.set_properties(render, {
