@@ -1,7 +1,8 @@
 import utils from "./utils.mjs";
 
-const DW = Math.max(window.screen.width, window.innerWidth);
-const [BW, BH] = [DW - 100, DW - 100];
+let D = Math.min(document.body.clientWidth, document.body.clientHeight);
+D -= 30;
+const [BW, BH] = [D, D];
 const [TW, TH] = [Math.floor(BW / 8), Math.floor(BH / 8)];
 const render = document.getElementById("render");
 utils.set_properties(render, {
@@ -449,10 +450,18 @@ class GameState {
 }
 
 const GS = new GameState();
-GS.render();
 
 const renderboard = new Event("renderboard");
-document.addEventListener("renderboard", () => GS.render(), false);
+document.addEventListener(
+    "renderboard",
+    () => {
+        document.getElementById("turn").innerText =
+            (GS.turn === 0 ? "White" : "Black") + "'s turn.";
+        GS.render();
+    },
+    false,
+);
+document.dispatchEvent(renderboard);
 
 render.addEventListener("pointerdown", (e) => {
     e.preventDefault();
