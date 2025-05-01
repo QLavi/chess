@@ -455,8 +455,13 @@ const renderboard = new Event("renderboard");
 document.addEventListener(
     "renderboard",
     () => {
-        document.getElementById("turn").innerText =
-            (GS.turn === 0 ? "White" : "Black") + "'s turn.";
+        if (GS.state !== 2) {
+            document.getElementById("turn").innerText =
+                (GS.turn === 0 ? "White" : "Black") + "'s turn.";
+        } else {
+            document.getElementById("turn").innerText =
+                "CHECKMATE! " + (GS.turn === 0 ? "Black" : "White") + " WON!";
+        }
         GS.render();
     },
     false,
