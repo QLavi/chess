@@ -108,7 +108,9 @@ export class Board {
         if (!p.has_moved) p.has_moved = true;
         if (dst[1] === 0 || dst[1] === 7) {
             p.at_end = true;
-            p.kind = PieceKind.QUEEN;
+            if (p.kind === PieceKind.PAWN) {
+                p.kind = PieceKind.QUEEN;
+            }
         }
         return new_state;
     }
