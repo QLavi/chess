@@ -4,12 +4,12 @@ import game, { Color, PieceKind, Board, Piece } from "./game.mjs";
 const body_rect = document
     .getElementsByTagName("body")[0]
     .getBoundingClientRect();
-const D = Math.min(body_rect.width, body_rect.height) - 100;
+const D = Math.min(body_rect.width, body_rect.height) - 50;
 const [BW, BH] = [D, D];
 const [TW, TH] = [Math.floor(BW / 8), Math.floor(BH / 8)];
 const render = document.getElementById("render");
 const pre = document.getElementsByTagName("pre")[0];
-pre.innerText = "WHITE's Turn.";
+pre.innerText = "WHITE's Turn";
 
 utils.set_properties(render, {
     style: {
@@ -135,6 +135,11 @@ function opponentstr() {
     return turn === Color.BLACK ? "WHITE" : "BLACK";
 }
 
+function resetstate() {
+    highlights = [];
+    selected = null;
+}
+
 const initial_black_pawns = [];
 const initial_white_pawns = [];
 for (let i = 0; i < 8; i += 1) {
@@ -179,35 +184,29 @@ document.addEventListener("render_board", () => {
 document.dispatchEvent(render_board);
 
 function update_game(pos) {
-    let state = null;
+    pre.innerText = `${turnstr()}'s Turn`;
+    const legal_moves = game.piece_switch(board, selected);
 
-    pre.innerText = `${turnstr()}'s Turn.`;
-    // if the board is in check
-    if (game.is_in_check(board, turn)) {
+    if (utils.includes(legal_moves, pos)) {
         const tmp_board = board.move(selected, pos);
-        if (game.is_in_check(tmp_board, turn)) {
-            highlights = board.where(PieceKind.KING, turn);
-            pre.innerText += `, ${turnstr()}'s KING is in CHECK!`;
-            return;
+        if (!game.is_in_check(tmp_board, turn)) {
+            board = tmp_board;
+            turn = turn === Color.WHITE ? Color.BLACK : Color.WHITE;
+            pre.innerText = `${turnstr()}'s Turn`;
+
+            if (game.is_checkmate(board, turn)) {
+                pre.innerText = `CHECKMATE. ${opponentstr()} WON!`;
+                resetstate();
+                return "OVER";
+            }
+
+            if (game.is_in_check(board, turn)) {
+                highlights = board.where(PieceKind.KING, turn);
+                pre.innerText = `${turnstr()}'s KING is in CHECK!`;
+            }
         }
     }
-
-    // if clicked position is a legal move, move the piece
-    // and update the turn
-    const legal_moves = game.piece_switch(board, selected);
-    if (utils.includes(legal_moves, pos)) {
-        board = board.move(selected, pos);
-        turn = turn === Color.WHITE ? Color.BLACK : Color.WHITE;
-    }
-
-    if (game.is_checkmate(board, turn)) {
-        state = "OVER";
-        pre.innerText = `CHECKMATE! ${opponentstr()} WON!`;
-    }
-
-    selected = null;
-    highlights = [];
-    return state;
+    resetstate();
 }
 
 function onpointerdown(e) {
