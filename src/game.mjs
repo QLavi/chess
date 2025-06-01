@@ -106,7 +106,10 @@ export class Board {
         new_state.set_at(dst, p);
 
         if (!p.has_moved) p.has_moved = true;
-        if (dst[1] === 0 || dst[1] === 7) p.at_end = true;
+        if (dst[1] === 0 || dst[1] === 7) {
+            p.at_end = true;
+            p.kind = PieceKind.QUEEN;
+        }
         return new_state;
     }
 }
@@ -188,13 +191,13 @@ function pawn(board, [x, y]) {
         [x + f, y - f],
     ].filter(is_bdd);
 
-    const normal_moves = [
+    let normal_moves = [
         [x, y - f],
         [x, y - 2 * f],
     ].filter(is_bdd);
 
     if (p.has_moved) {
-        normal_moves.pop();
+        normal_moves = normal_moves.slice(0, 1);
     }
 
     const moves = [];
