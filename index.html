@@ -1,15 +1,30 @@
 <!doctype html>
-<html style="width: 100%; height: 100%">
+<html>
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Chess</title>
+        <style>
+            html {
+                width: 100%;
+                height: 100%;
+            }
+            body {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                margin: 0 0 0 0;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
     </head>
-    <body style="width: 100%; height: 100%">
+    <body>
         <div id="render" style="position: relative">
             <img id="board" src="./assets/board.svg" />
         </div>
-        <pre id="turn"></pre>
-        <script type="module" src="./src/chess.mjs"></script>
+        <pre>Hello World</pre>
+        <script type="module" src="./src/index.mjs"></script>
     </body>
 </html>
